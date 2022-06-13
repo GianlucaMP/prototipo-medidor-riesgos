@@ -4,7 +4,7 @@
       <div class="rmm">
         <ul>
           <li>
-            <router-link to="/home">HOME</router-link>
+            <router-link to="/">Inicio</router-link>
           </li>
           <li>
             <router-link to="/mapa">Mapa</router-link>
@@ -13,7 +13,7 @@
       </div>
     </nav>
 
-    <img src="./assets/logo.png" />
+    <!-- <img src="./assets/logo.png" /> -->
     <router-view />
   </div>
 </template>
