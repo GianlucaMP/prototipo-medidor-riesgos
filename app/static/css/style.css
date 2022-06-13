@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
+img {max-width: 100%; height: auto;}
+
+body{
+	background: url("../image/background.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+	background-position: center center;
+	font-family: 'Montserrat', Helvetica, sans-serif;
+	font-size: 14px;
+	margin: 0;  
+}
+
+nav {
+	padding: 25px;
+	background-color: #343a40 !important;
+}
+
+nav li {
+	display: inline-block;
+}
+
+nav li a {
+	display: inline-block;
+	padding: 10px 25px;
+	text-decoration: none;
+	color: white;
+	margin: 0 20px;
+	font-size: 20px;
+}
+
+nav li a:hover {
+	background: #17a2b8;
+}
+
+a {
+	text-decoration: none;
+}
+
+#content {
+	width: 75%;
+	margin: 20px auto;
+	background-color: rgba(0,0,0,0.6);
+	padding: 50px;
+	border: solid 1px black;
+	min-height: 400px;
+	color: white;
+	overflow: hidden;
+	position: relative;
+}
+
+.home h1, .home h4 {
+	text-align: center;
+}
+
+.home h4{
+	margin: 30px 0 50px 0;
+}
+
+.section1 .col, .section1 .col2 {
+	float: left;
+	width: 30%;
+	text-align: center;
+	padding: 20px;
+	border-radius: 25%;
+	background-color: #555;
+}
+
+.section1 .col:hover, .section1 .col2:hover {
+	background-color: #17a2b8;
+}
+
+.section1 .col2 {
+	margin: 0px 5%;
+}
+
+.section1 .icono {
+	font-size: 100px;
+}
+
+.section1 a {
+	color: #CCC;
+}
+
+.section1 h2 {
+	font-size: 20px;
+	text-transform: uppercase;
+	margin: 30px 0 0 0;
+}
+
+.estadisticaRow {
+	padding: 20px;
+	background-color: black;
+	margin: 20px 0;
+	color: white;
+}
+
+.footer {
+	background-color: #343a40!important;
+	color: white;
+	text-align: center;
+	padding: 50px;
+	bottom: 0;
+	width: 100%;
+}
+
+/* media screen o media queries -> cuando la resolución sea menor a lo puesto, cambia el diseño */
+@media screen and (max-width: 1024px) {
+
+	.section1 .col, .section1 .col2 {
+		float: none;
+		width: 100%;
+		margin: 20px 0px;
+		border-radius: 0;
+	}
+
+}
