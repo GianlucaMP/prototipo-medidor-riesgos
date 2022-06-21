@@ -1,6 +1,7 @@
 <template>
   <div class="about">
-    <h1>Hola extraño, aqui podras ver un mapa con los centros</h1>
+    <h1>Hola, aqui podras ver un mapa con los centros</h1>
+    <input type="text" v-model="input" placeholder="Buscar dirección..." />
     <div style="height: 800px; width: 100%">
       <div style="height: 200px overflow: auto;"></div>
       <l-map
