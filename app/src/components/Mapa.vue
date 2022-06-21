@@ -15,6 +15,11 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
+        <l-control position="topright">
+          <button @click="clickHandler">
+            Zonas Inundables
+          </button>
+        </l-control>
       </l-map>
       <div class="m-3">
         <router-link class="btn btn-light" to="/">Volver</router-link>
@@ -25,7 +30,8 @@
 
 <script>
 import { latLng } from "leaflet";
-import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup, LControl } from "vue2-leaflet";
+import poligonos from "../resources/poligonos";
 
 export default {
   name: "Mapa",
@@ -33,7 +39,8 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup
+    LPopup,
+    LControl
   },
   data() {
     return {
@@ -41,7 +48,9 @@ export default {
       zoom: 14,
       center: latLng(-34.920457, -57.953536),
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      marker: latLng(-34.920457, -57.953536)
+      marker: latLng(-34.920457, -57.953536),
+      geojsonFeature: null,
+      jsonLayer: null
     };
   },
   created() {},
@@ -66,6 +75,51 @@ export default {
       this.marker
         .bindPopup("<b>Este marcador se encuentra:</b><br>" + latlng.toString())
         .openPopup();
+
+      // var myLayer = L.geoJSON().addTo(this.map);
+      // myLayer.addData(this.geojsonFeature);
+    },
+    clickHandler() {
+      if (this.jsonLayer) {
+        this.jsonLayer.clearLayers();
+        this.map.removeLayer(this.jsonLayer);
+        this.jsonLayer = null;
+        this.geojsonFeature = null;
+      } else {
+        this.geojsonFeature = poligonos.la_plata_1;
+        this.jsonLayer = L.geoJSON(this.geojsonFeature, {
+          style: this.style
+        }).addTo(this.map);
+        // this.jsonLayer = L.geoJSON(this.geojsonFeature).addTo(this.map);
+      }
+    },
+    getColor(d) {
+      return d > 1000
+        ? "#800026"
+        : d > 500
+        ? "#BD0026"
+        : d > 200
+        ? "#E31A1C"
+        : d > 100
+        ? "#FC4E2A"
+        : d > 50
+        ? "#FD8D3C"
+        : d > 20
+        ? "#FEB24C"
+        : d > 10
+        ? "#FED976"
+        : "#FFEDA0";
+    },
+    style(feature) {
+      return {
+        // stroke: false,
+        fillColor: this.getColor(feature.properties.altura),
+        weight: 2,
+        opacity: 1,
+        color: "black",
+        dashArray: "3",
+        fillOpacity: 0.7
+      };
     }
   }
 };
