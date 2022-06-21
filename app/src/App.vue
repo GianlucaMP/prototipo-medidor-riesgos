@@ -9,6 +9,9 @@
           <li>
             <router-link to="/mapa">Mapa</router-link>
           </li>
+          <li>
+            <router-link to="/recomendaciones">Recomendaciones</router-link>
+          </li>
         </ul>
       </div>
     </nav>
