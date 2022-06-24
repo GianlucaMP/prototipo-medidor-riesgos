@@ -1,7 +1,20 @@
 <template>
   <div class="about">
-    <h1>Hola, aqui podras ver un mapa con los centros</h1>
-    <input type="text" v-model="input" placeholder="Buscar dirección..." />
+    <h1>Hola, aqui podras ver un mapa con la informacion sobre el terreno</h1>
+    <div class="container">
+      <div id="barraBusqueda">
+        <input
+          type="text"
+          v-model="form.search"
+          placeholder="Buscar dirección..."
+        />
+        <select name="filtro" v-model="form.mapa_id" @change="setMapFilter">
+          <option value="0">Mapa</option>
+          <option value="1">Mapa de inundaciones</option>
+          <option value="2">Mapa de altitud</option>
+        </select>
+      </div>
+    </div>
     <div style="height: 800px; width: 100%">
       <div style="height: 200px overflow: auto;"></div>
       <l-map
@@ -15,8 +28,9 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
+        <l-control position="bottomleft"></l-control>
         <l-control position="topright">
-          <button @click="clickHandler">
+          <button @click="">
             Zonas Inundables
           </button>
         </l-control>
@@ -50,7 +64,11 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       marker: latLng(-34.920457, -57.953536),
       geojsonFeature: null,
-      jsonLayer: null
+      jsonLayer: null,
+      form: {
+        search: "",
+        mapa_id: 0
+      }
     };
   },
   created() {},
@@ -79,14 +97,17 @@ export default {
       // var myLayer = L.geoJSON().addTo(this.map);
       // myLayer.addData(this.geojsonFeature);
     },
-    clickHandler() {
+    setMap(id) {
+      this.geojsonFeature = poligonos[id];
+    },
+    setMapFilter() {
       if (this.jsonLayer) {
         this.jsonLayer.clearLayers();
         this.map.removeLayer(this.jsonLayer);
         this.jsonLayer = null;
         this.geojsonFeature = null;
       } else {
-        this.geojsonFeature = poligonos.la_plata_1;
+        this.setMap(this.form.mapa_id);
         this.jsonLayer = L.geoJSON(this.geojsonFeature, {
           style: this.style
         }).addTo(this.map);
@@ -124,3 +145,10 @@ export default {
   }
 };
 </script>
+
+<style>
+#barraBusqueda {
+  margin: 20px;
+  display: flex;
+}
+</style>

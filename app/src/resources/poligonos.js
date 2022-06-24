@@ -1,4 +1,4 @@
-var poligonos = {
+var test = {
   casco: {
     type: "FeatureCollection",
     features: [
@@ -22,6 +22,10 @@ var poligonos = {
   }
 };
 
-poligonos.la_plata_1 = require("./LaPlata1.json");
+var poligonos = [];
+poligonos[0] = null;
+
+// poligonos.la_plata_0 = require("./LaPlata0.json");
+poligonos[1] = require("./LaPlata1.json");
 
 export default poligonos;
