@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>Hola, aqui podras ver un mapa con la informacion sobre el terreno</h1>
-    <div class="container">
+    <div class="">
       <div id="barraBusqueda">
         <input
           type="text"
@@ -9,14 +9,15 @@
           placeholder="Buscar dirección..."
         />
         <select name="filtro" v-model="form.mapa_id" @change="setMapFilter">
-          <option value="0">Mapa</option>
-          <option value="1">Mapa de inundaciones</option>
-          <option value="2">Mapa de altitud</option>
+          <option value="mapa">Mapa</option>
+          <option value="mapa_inundaciones">Mapa de inundaciones</option>
+          <option value="mapa_inundaciones_2">Mapa de inundaciones 2</option>
+          <option value="mapa_altitud">Mapa de altitud</option>
         </select>
       </div>
     </div>
-    <div style="height: 800px; width: 100%">
-      <div style="height: 200px overflow: auto;"></div>
+    <div id="map-container" style="height: 800px; width: 100%">
+      <!-- <div style="height: 200px overflow: auto;"></div> -->
       <l-map
         ref="map"
         style="height: 85%; width: 95%; margin: auto"
@@ -29,11 +30,6 @@
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
         <l-control position="bottomleft"></l-control>
-        <l-control position="topright">
-          <button @click="">
-            Zonas Inundables
-          </button>
-        </l-control>
       </l-map>
       <div class="m-3">
         <router-link class="btn btn-light" to="/">Volver</router-link>
@@ -67,7 +63,7 @@ export default {
       jsonLayer: null,
       form: {
         search: "",
-        mapa_id: 0
+        mapa_id: "mapa"
       }
     };
   },
@@ -108,6 +104,7 @@ export default {
         this.geojsonFeature = null;
       } else {
         this.setMap(this.form.mapa_id);
+        console.log(this.geojsonFeature);
         this.jsonLayer = L.geoJSON(this.geojsonFeature, {
           style: this.style
         }).addTo(this.map);
@@ -132,15 +129,27 @@ export default {
         : "#FFEDA0";
     },
     style(feature) {
-      return {
-        // stroke: false,
-        fillColor: this.getColor(feature.properties.altura),
-        weight: 2,
-        opacity: 1,
-        color: "black",
-        dashArray: "3",
-        fillOpacity: 0.7
-      };
+      if ("mapa_inundaciones" == this.form.mapa_id) {
+        return {
+          // stroke: false,
+          fillColor: this.getColor(feature.properties.altura),
+          weight: 2,
+          opacity: 1,
+          color: "black",
+          dashArray: "3",
+          fillOpacity: 0.7
+        };
+      } else {
+        return {
+          stroke: false,
+          fillColor: "blue",
+          weight: 2,
+          opacity: 1,
+          color: "black",
+          dashArray: "3",
+          fillOpacity: 0.3
+        };
+      }
     }
   }
 };
@@ -148,7 +157,13 @@ export default {
 
 <style>
 #barraBusqueda {
-  margin: 20px;
+  /* margin: 20px; */
+  margin: 20px auto;
+  width: 95%;
   display: flex;
+}
+
+#barraBusqueda input {
+  margin-right: 10px;
 }
 </style>

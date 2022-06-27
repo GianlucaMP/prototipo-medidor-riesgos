@@ -22,10 +22,11 @@ var test = {
   }
 };
 
-var poligonos = [];
-poligonos[0] = null;
+var poligonos = {};
 
-// poligonos.la_plata_0 = require("./LaPlata0.json");
-poligonos[1] = require("./LaPlata1.json");
+poligonos.mapa_base = require("./LaPlata0.json");
+poligonos.mapa_inundaciones = require("./LaPlata1.json");
+// poligonos.mapa_altitud = require("./LaPlata2.json");
+poligonos.mapa_inundaciones_2 = require("./LaPlataInundaciones2.json");
 
 export default poligonos;
