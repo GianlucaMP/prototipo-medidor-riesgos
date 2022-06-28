@@ -3,12 +3,20 @@
     <h1>Hola, aqui podras ver un mapa con la informacion sobre el terreno</h1>
     <div class="">
       <div id="barraBusqueda">
+        <label for="direccion">Buscar Direccion: </label>
         <input
+          id="direccion"
           type="text"
           v-model="form.search"
-          placeholder="Buscar dirección..."
+          placeholder="Av. 44 y 7"
         />
-        <select name="filtro" v-model="form.mapa_id" @change="setMapFilter">
+        <label for="filtro">Filtro: </label>
+        <select
+          id="filtro"
+          name="filtro"
+          v-model="form.mapa_id"
+          @change="setMapFilter"
+        >
           <option value="mapa">Mapa</option>
           <option value="mapa_inundaciones">Mapa de inundaciones</option>
           <option value="mapa_inundaciones_2">Mapa de inundaciones 2</option>
