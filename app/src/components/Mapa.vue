@@ -9,6 +9,7 @@
           type="text"
           v-model="form.search"
           placeholder="Av. 44 y 7"
+          @keyup="searchAddress"
         />
         <label for="filtro">Filtro: </label>
         <select
@@ -33,7 +34,7 @@
         :center="center"
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
-        @click="onMapClick"
+        @click="onMapClick(e)"
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
@@ -50,6 +51,9 @@
 import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup, LControl } from "vue2-leaflet";
 import poligonos from "../resources/poligonos";
+
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+const provider = new OpenStreetMapProvider();
 
 export default {
   name: "Mapa",
@@ -157,6 +161,12 @@ export default {
           dashArray: "3",
           fillOpacity: 0.3
         };
+      }
+    },
+    async searchAddress(e) {
+      if (e.key == "Enter") {
+        const results = await provider.search({ query: this.form.search });
+        console.log(results);
       }
     }
   }

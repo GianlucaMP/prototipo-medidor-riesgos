@@ -5,6 +5,7 @@ import App from "./App";
 import router from "./router";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet-geosearch/dist/geosearch.css";
 
 Vue.config.productionTip = false;
 
