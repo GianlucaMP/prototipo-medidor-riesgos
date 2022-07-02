@@ -11,6 +11,7 @@
           placeholder="Av. 44 y 7"
           @keyup="searchAddress"
         />
+        <!-- <div id="direccion"></div> -->
         <label for="filtro">Filtro: </label>
         <select
           id="filtro"
@@ -34,7 +35,7 @@
         :center="center"
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
-        @click="onMapClick(e)"
+        @click="onMapClick"
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
@@ -52,8 +53,13 @@ import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup, LControl } from "vue2-leaflet";
 import poligonos from "../resources/poligonos";
 
-import { OpenStreetMapProvider } from "leaflet-geosearch";
+import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 const provider = new OpenStreetMapProvider();
+
+// const search = new GeoSearchControl({
+//   provider: provider
+//   //,style: "bar"
+// });
 
 export default {
   name: "Mapa",
@@ -83,6 +89,11 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.map = this.$refs.map.mapObject;
+      // this.map.addControl(search);
+
+      // document
+      //   .getElementById("direccion")
+      //   .appendChild(document.querySelector(".geosearch"));
     });
   },
   methods: {
@@ -97,13 +108,17 @@ export default {
         this.map.removeLayer(this.marker);
       }
       let latlng = e.latlng;
-      this.marker = new L.marker(latlng).addTo(this.map);
-      this.marker
-        .bindPopup("<b>Este marcador se encuentra:</b><br>" + latlng.toString())
-        .openPopup();
-
-      // var myLayer = L.geoJSON().addTo(this.map);
-      // myLayer.addData(this.geojsonFeature);
+      let address;
+      fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`
+      )
+        .then(response => response.json())
+        .then(data => {
+          address = data.display_name;
+          // `${data.address.road}, ${data.address.house_number} <br> ${data.address.city} ${data.address.postcode}`;
+          this.marker = new L.marker(latlng).addTo(this.map);
+          this.marker.bindPopup(address).openPopup();
+        });
     },
     setMap(id) {
       this.geojsonFeature = poligonos[id];
@@ -166,7 +181,15 @@ export default {
     async searchAddress(e) {
       if (e.key == "Enter") {
         const results = await provider.search({ query: this.form.search });
-        console.log(results);
+        console.log(results); // results es un array
+        const { x: long, y: lat, label: address } = results[0];
+        console.log(results[0].raw);
+        // let coso = L.latLng([lat, long]);
+        if (this.marker) {
+          this.map.removeLayer(this.marker);
+        }
+        this.marker = new L.marker([lat, long]).addTo(this.map);
+        this.marker.bindPopup(address).openPopup();
       }
     }
   }
