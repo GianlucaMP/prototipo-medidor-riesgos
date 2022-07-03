@@ -20,6 +20,7 @@
           @change="setMapFilter"
         >
           <option value="mapa">Mapa</option>
+          <option value="mapa_base">Mapa Base</option>
           <option value="mapa_inundaciones">Mapa de inundaciones</option>
           <option value="mapa_inundaciones_2">Mapa de inundaciones 2</option>
           <option value="mapa_altitud">Mapa de altitud</option>
@@ -46,12 +47,21 @@
       </div>
     </div>
   </div>
+
+  <!-- <div>
+    <ul>
+      <li>Direccion: ${address}</li>
+      <li><b>Zona: Inundable</b></li>
+    </ul>
+  </div> -->
 </template>
 
 <script>
 import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup, LControl } from "vue2-leaflet";
 import poligonos from "../resources/poligonos";
+import { geoContains } from "d3-geo";
+const GeoJsonGeometriesLookup = require("geojson-geometries-lookup");
 
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 const provider = new OpenStreetMapProvider();
@@ -103,22 +113,35 @@ export default {
     centerUpdated(center) {
       this.center = center;
     },
-    onMapClick(e) {
+    async onMapClick(e) {
       if (this.marker) {
         this.map.removeLayer(this.marker);
       }
       let latlng = e.latlng;
+
+      let inundable = "Sin Comentarios";
+      if (this.geojsonFeature != null) {
+        const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
+        const point = { type: "Point", coordinates: [latlng.lng, latlng.lat] };
+        if (glookup.countContainers(point)) {
+          console.log("Está dentro");
+          inundable = "Inundable";
+        } else {
+          console.log("Está fuera");
+          inundable = "Segura";
+        }
+      }
       let address;
-      fetch(
+      await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`
       )
         .then(response => response.json())
         .then(data => {
           address = data.display_name;
-          // `${data.address.road}, ${data.address.house_number} <br> ${data.address.city} ${data.address.postcode}`;
-          this.marker = new L.marker(latlng).addTo(this.map);
-          this.marker.bindPopup(address).openPopup();
         });
+      let texto = `<div><ul><li>Direccion: ${address}</li><li><b>Zona: ${inundable}</b></li></ul></div>`;
+      this.marker = new L.marker(latlng).addTo(this.map);
+      this.marker.bindPopup(texto).openPopup();
     },
     setMap(id) {
       this.geojsonFeature = poligonos[id];
@@ -129,14 +152,13 @@ export default {
         this.map.removeLayer(this.jsonLayer);
         this.jsonLayer = null;
         this.geojsonFeature = null;
-      } else {
-        this.setMap(this.form.mapa_id);
-        console.log(this.geojsonFeature);
-        this.jsonLayer = L.geoJSON(this.geojsonFeature, {
-          style: this.style
-        }).addTo(this.map);
-        // this.jsonLayer = L.geoJSON(this.geojsonFeature).addTo(this.map);
       }
+      this.setMap(this.form.mapa_id);
+      console.log(this.geojsonFeature);
+      this.jsonLayer = L.geoJSON(this.geojsonFeature, {
+        style: this.style
+      }).addTo(this.map);
+      // this.jsonLayer = L.geoJSON(this.geojsonFeature).addTo(this.map);
     },
     getColor(d) {
       return d > 1000
