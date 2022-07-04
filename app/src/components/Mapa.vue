@@ -22,8 +22,10 @@
           <option value="mapa">Mapa</option>
           <option value="mapa_base">Mapa Base</option>
           <option value="mapa_inundaciones">Mapa de inundaciones</option>
-          <option value="mapa_inundaciones_2">Mapa de inundaciones 2</option>
-          <option value="mapa_altitud">Mapa de altitud</option>
+          <option value="mapa_inundaciones_simple"
+            >Mapa de inundaciones simple</option
+          >
+          <!-- <option value="mapa_altitud">Mapa de altitud</option> -->
         </select>
       </div>
     </div>
@@ -66,10 +68,9 @@ const GeoJsonGeometriesLookup = require("geojson-geometries-lookup");
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 const provider = new OpenStreetMapProvider();
 
-// const search = new GeoSearchControl({
-//   provider: provider
-//   //,style: "bar"
-// });
+const getDetalle = (address, situacion) => {
+  return `<div><ul><li>Direccion: ${address}</li><li><b>${situacion}</b></li></ul></div>`;
+};
 
 export default {
   name: "Mapa",
@@ -87,7 +88,7 @@ export default {
       center: latLng(-34.920457, -57.953536),
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       marker: latLng(-34.920457, -57.953536),
-      geojsonFeature: null,
+      geojsonFeature: {},
       jsonLayer: null,
       form: {
         search: "",
@@ -99,11 +100,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.map = this.$refs.map.mapObject;
-      // this.map.addControl(search);
-
-      // document
-      //   .getElementById("direccion")
-      //   .appendChild(document.querySelector(".geosearch"));
     });
   },
   methods: {
@@ -113,24 +109,66 @@ export default {
     centerUpdated(center) {
       this.center = center;
     },
-    async onMapClick(e) {
+    getContainerState(lng, lat) {
+      const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
+      const point = { type: "Point", coordinates: [lng, lat] };
+      // console.log(glookup.getContainers(point));
+      let containers = glookup.getContainers(point);
+      if (containers.features.length) {
+        return containers.features[0].properties.state;
+      } else {
+        return "Lugar Seguro";
+      }
+    },
+    isInside(lng, lat) {
+      const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
+      const point = { type: "Point", coordinates: [lng, lat] };
+      return glookup.countContainers(point);
+    },
+    getFeature(lng, lat) {
+      const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
+      const point = { type: "Point", coordinates: [lng, lat] };
+      let containers = glookup.getContainers(point);
+      if (containers.features.length) {
+        return containers.features[0];
+      } else {
+        return false;
+      }
+    },
+    getSituacion(lng, lat) {
+      let situacion;
+      let feature = this.getFeature(lng, lat);
+      switch (this.form.mapa_id) {
+        case "mapa_inundaciones_simple":
+          feature
+            ? (situacion = feature.properties.state)
+            : (situacion = "Zona: Segura");
+          break;
+        default:
+          situacion = "Sin Comentarios";
+          break;
+      }
+      return situacion;
+    },
+    setMarker(address, lng, lat) {
       if (this.marker) {
         this.map.removeLayer(this.marker);
       }
+      let situacion = this.getSituacion(lng, lat);
+      let detalle = getDetalle(address, situacion);
+      this.marker = new L.marker([lat, lng]).addTo(this.map);
+      this.marker.bindPopup(detalle).openPopup();
+    },
+    async onMapClick(e) {
       let latlng = e.latlng;
 
-      let inundable = "Sin Comentarios";
       if (this.geojsonFeature != null) {
-        const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
-        const point = { type: "Point", coordinates: [latlng.lng, latlng.lat] };
-        if (glookup.countContainers(point)) {
-          console.log("Está dentro");
-          inundable = "Inundable";
-        } else {
-          console.log("Está fuera");
-          inundable = "Segura";
-        }
+        /* this.isInside(latlng.lng, latlng.lat)
+          ? (situacion = "Inundable")
+          : (situacion = "Segura"); */
+        // situacion = this.getContainerState(latlng.lng, latlng.lat);
       }
+
       let address;
       await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`
@@ -139,9 +177,7 @@ export default {
         .then(data => {
           address = data.display_name;
         });
-      let texto = `<div><ul><li>Direccion: ${address}</li><li><b>Zona: ${inundable}</b></li></ul></div>`;
-      this.marker = new L.marker(latlng).addTo(this.map);
-      this.marker.bindPopup(texto).openPopup();
+      this.setMarker(address, latlng.lng, latlng.lat);
     },
     setMap(id) {
       this.geojsonFeature = poligonos[id];
@@ -203,15 +239,11 @@ export default {
     async searchAddress(e) {
       if (e.key == "Enter") {
         const results = await provider.search({ query: this.form.search });
-        console.log(results); // results es un array
-        const { x: long, y: lat, label: address } = results[0];
+        // console.log(results); // results es un array
+        const { x: lng, y: lat, label: address } = results[0];
         console.log(results[0].raw);
         // let coso = L.latLng([lat, long]);
-        if (this.marker) {
-          this.map.removeLayer(this.marker);
-        }
-        this.marker = new L.marker([lat, long]).addTo(this.map);
-        this.marker.bindPopup(address).openPopup();
+        this.setMarker(address, lng, lat);
       }
     }
   }

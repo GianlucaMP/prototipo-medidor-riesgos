@@ -7,6 +7,7 @@
         "shape": "Polygon",
         "name": "Unnamed Layer",
         "category": "default",
+        "state": "Zona: Inundable",
         "style": {
           "stroke": false,
           "fillColor": "blue",

@@ -27,6 +27,6 @@ var poligonos = {};
 poligonos.mapa_base = require("./LaPlata0.json");
 poligonos.mapa_inundaciones = require("./LaPlata1.json");
 // poligonos.mapa_altitud = require("./LaPlata2.json");
-poligonos.mapa_inundaciones_2 = require("./LaPlataInundaciones2.json");
+poligonos.mapa_inundaciones_simple = require("./LaPlataInundacionesSimple.json");
 
 export default poligonos;
