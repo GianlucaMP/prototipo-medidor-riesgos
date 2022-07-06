@@ -25,6 +25,7 @@
           <option value="mapa_inundaciones_simple"
             >Mapa de inundaciones simple</option
           >
+          <option value="mapa_altitud">Mapa de altitudes</option>
           <!-- <option value="mapa_altitud">Mapa de altitud</option> -->
         </select>
       </div>
@@ -130,7 +131,9 @@ export default {
       const point = { type: "Point", coordinates: [lng, lat] };
       let containers = glookup.getContainers(point);
       if (containers.features.length) {
-        return containers.features[0];
+        let last_index = containers.features.length - 1;
+        console.log(containers.features[last_index].properties.name);
+        return containers.features[last_index];
       } else {
         return false;
       }
@@ -226,7 +229,7 @@ export default {
         };
       } else {
         return {
-          stroke: false,
+          // stroke: false,
           fillColor: "blue",
           weight: 2,
           opacity: 1,
@@ -242,7 +245,6 @@ export default {
         // console.log(results); // results es un array
         const { x: lng, y: lat, label: address } = results[0];
         console.log(results[0].raw);
-        // let coso = L.latLng([lat, long]);
         this.setMarker(address, lng, lat);
       }
     }
