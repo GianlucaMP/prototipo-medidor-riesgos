@@ -7,16 +7,7 @@
         "shape": "Polygon",
         "name": "Unnamed Layer",
         "category": "default",
-        "state": "Zona: Inundable",
-        "style": {
-          "stroke": false,
-          "fillColor": "blue",
-          "weight": 2,
-          "opacity": 1,
-          "color": "red",
-          "dashArray": "3",
-          "fillOpacity": 0.3
-        }
+        "info": "Zona: Inundable"
       },
       "geometry": {
         "type": "Polygon",

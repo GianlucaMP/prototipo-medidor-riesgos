@@ -1,5 +1,8 @@
 <template>
   <div class="about">
+    <!-- <router-link class="headers" :to="{ name: 'Recomendaciones', hash: '#ra' }">
+      Availability
+    </router-link> -->
     <h1>Hola, aqui podras ver un mapa con la informacion sobre el terreno</h1>
     <div class="">
       <div id="barraBusqueda">
@@ -20,8 +23,8 @@
           @change="setMapFilter"
         >
           <option value="mapa">Mapa</option>
-          <option value="mapa_base">Mapa Base</option>
-          <option value="mapa_inundaciones">Mapa de inundaciones</option>
+          <!-- <option value="mapa_base">Mapa Base</option>
+          <option value="mapa_inundaciones">Mapa de inundaciones</option> -->
           <option value="mapa_inundaciones_simple"
             >Mapa de inundaciones simple</option
           >
@@ -50,27 +53,25 @@
       </div>
     </div>
   </div>
-
-  <!-- <div>
-    <ul>
-      <li>Direccion: ${address}</li>
-      <li><b>Zona: Inundable</b></li>
-    </ul>
-  </div> -->
 </template>
 
 <script>
 import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup, LControl } from "vue2-leaflet";
 import poligonos from "../resources/poligonos";
-import { geoContains } from "d3-geo";
 const GeoJsonGeometriesLookup = require("geojson-geometries-lookup");
 
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 const provider = new OpenStreetMapProvider();
 
-const getDetalle = (address, situacion) => {
-  return `<div><ul><li>Direccion: ${address}</li><li><b>${situacion}</b></li></ul></div>`;
+const getDetalle = (address, info) => {
+  return `<div>
+            <ul>
+              <li>Direccion: ${address}</li>
+              <li><b>${info}</b></li>
+              <li><a href="/#/recomendaciones">Ver mas</a></li>
+            </ul>
+          </div>`;
 };
 
 export default {
@@ -110,7 +111,7 @@ export default {
     centerUpdated(center) {
       this.center = center;
     },
-    getContainerState(lng, lat) {
+    /* getContainerState(lng, lat) {
       const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
       const point = { type: "Point", coordinates: [lng, lat] };
       // console.log(glookup.getContainers(point));
@@ -125,7 +126,7 @@ export default {
       const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
       const point = { type: "Point", coordinates: [lng, lat] };
       return glookup.countContainers(point);
-    },
+    }, */
     getFeature(lng, lat) {
       const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
       const point = { type: "Point", coordinates: [lng, lat] };
@@ -138,27 +139,30 @@ export default {
         return false;
       }
     },
-    getSituacion(lng, lat) {
-      let situacion;
+    getInfo(lng, lat) {
+      let info;
       let feature = this.getFeature(lng, lat);
       switch (this.form.mapa_id) {
         case "mapa_inundaciones_simple":
+          feature ? (info = feature.properties.info) : (info = "Zona: Segura");
+          break;
+        case "mapa_altitud":
           feature
-            ? (situacion = feature.properties.state)
-            : (situacion = "Zona: Segura");
+            ? (info = `Altura: ${feature.properties.altura}`)
+            : (info = "Zona fuera de rango");
           break;
         default:
-          situacion = "Sin Comentarios";
+          info = "Sin Comentarios";
           break;
       }
-      return situacion;
+      return info;
     },
     setMarker(address, lng, lat) {
       if (this.marker) {
         this.map.removeLayer(this.marker);
       }
-      let situacion = this.getSituacion(lng, lat);
-      let detalle = getDetalle(address, situacion);
+      let informacion = this.getInfo(lng, lat);
+      let detalle = getDetalle(address, informacion);
       this.marker = new L.marker([lat, lng]).addTo(this.map);
       this.marker.bindPopup(detalle).openPopup();
     },
@@ -197,10 +201,9 @@ export default {
       this.jsonLayer = L.geoJSON(this.geojsonFeature, {
         style: this.style
       }).addTo(this.map);
-      // this.jsonLayer = L.geoJSON(this.geojsonFeature).addTo(this.map);
     },
     getColor(d) {
-      return d > 1000
+      /*  return d > 1000
         ? "#800026"
         : d > 500
         ? "#BD0026"
@@ -214,30 +217,28 @@ export default {
         ? "#FEB24C"
         : d > 10
         ? "#FED976"
-        : "#FFEDA0";
+        : "#FFEDA0"; */
+      return d > 30 ? "#orange" : d > 20 ? "yellow" : d > 10 ? "green" : "blue";
     },
     style(feature) {
-      if ("mapa_inundaciones" == this.form.mapa_id) {
-        return {
-          // stroke: false,
-          fillColor: this.getColor(feature.properties.altura),
-          weight: 2,
-          opacity: 1,
-          color: "black",
-          dashArray: "3",
-          fillOpacity: 0.7
-        };
-      } else {
-        return {
-          // stroke: false,
-          fillColor: "blue",
-          weight: 2,
-          opacity: 1,
-          color: "black",
-          dashArray: "3",
-          fillOpacity: 0.3
-        };
+      let style = {
+        stroke: false,
+        // fillColor: "blue", default
+        weight: 2,
+        opacity: 1,
+        color: "black",
+        dashArray: "3",
+        fillOpacity: 0.3
+      };
+      switch (this.form.mapa_id) {
+        case "mapa_inundaciones_simple":
+          style.fillColor = "blue";
+        case "mapa_altitud":
+          style.fillColor = this.getColor(feature.properties.altura);
+        default:
+          break;
       }
+      return style;
     },
     async searchAddress(e) {
       if (e.key == "Enter") {
