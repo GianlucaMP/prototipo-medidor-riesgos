@@ -31,6 +31,8 @@
           <option value="mapa_altitud">Mapa de altitudes</option>
           <!-- <option value="mapa_altitud">Mapa de altitud</option> -->
         </select>
+        <label for="descripcion-filtro">Descripcion: </label>
+        <p id="descripcion">{{ form.descripcion }}</p>
       </div>
     </div>
     <div id="map-container" style="height: 800px; width: 100%">
@@ -67,7 +69,7 @@ const provider = new OpenStreetMapProvider();
 const getDetalle = (address, info) => {
   return `<div>
             <ul>
-              <li>Direccion: ${address}</li>
+              <li><b>Direccion</b>: ${address}</li>
               <li><b>${info}</b></li>
               <li><a href="/#/recomendaciones">Ver mas</a></li>
             </ul>
@@ -94,7 +96,8 @@ export default {
       jsonLayer: null,
       form: {
         search: "",
-        mapa_id: "mapa"
+        mapa_id: "mapa",
+        descripcion: "Mapa estandar de la ciudad de La Plata"
       }
     };
   },
@@ -111,22 +114,6 @@ export default {
     centerUpdated(center) {
       this.center = center;
     },
-    /* getContainerState(lng, lat) {
-      const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
-      const point = { type: "Point", coordinates: [lng, lat] };
-      // console.log(glookup.getContainers(point));
-      let containers = glookup.getContainers(point);
-      if (containers.features.length) {
-        return containers.features[0].properties.state;
-      } else {
-        return "Lugar Seguro";
-      }
-    },
-    isInside(lng, lat) {
-      const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
-      const point = { type: "Point", coordinates: [lng, lat] };
-      return glookup.countContainers(point);
-    }, */
     getFeature(lng, lat) {
       const glookup = new GeoJsonGeometriesLookup(this.geojsonFeature);
       const point = { type: "Point", coordinates: [lng, lat] };
@@ -144,11 +131,13 @@ export default {
       let feature = this.getFeature(lng, lat);
       switch (this.form.mapa_id) {
         case "mapa_inundaciones_simple":
-          feature ? (info = feature.properties.info) : (info = "Zona: Segura");
+          feature
+            ? (info = feature.properties.info)
+            : (info = "Riesgo de inundacion: Poco Probable");
           break;
         case "mapa_altitud":
           feature
-            ? (info = `Altura: ${feature.properties.altura}`)
+            ? (info = `Altura del terreno: ${feature.properties.altura} m`)
             : (info = "Zona fuera de rango");
           break;
         default:
@@ -169,13 +158,6 @@ export default {
     async onMapClick(e) {
       let latlng = e.latlng;
 
-      if (this.geojsonFeature != null) {
-        /* this.isInside(latlng.lng, latlng.lat)
-          ? (situacion = "Inundable")
-          : (situacion = "Segura"); */
-        // situacion = this.getContainerState(latlng.lng, latlng.lat);
-      }
-
       let address;
       await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`
@@ -186,9 +168,6 @@ export default {
         });
       this.setMarker(address, latlng.lng, latlng.lat);
     },
-    setMap(id) {
-      this.geojsonFeature = poligonos[id];
-    },
     setMapFilter() {
       if (this.jsonLayer) {
         this.jsonLayer.clearLayers();
@@ -196,8 +175,25 @@ export default {
         this.jsonLayer = null;
         this.geojsonFeature = null;
       }
-      this.setMap(this.form.mapa_id);
-      console.log(this.geojsonFeature);
+      /* Seteo el geojsonFeature con el poligono correspondiente */
+      const { mapa_id: id } = this.form;
+      this.geojsonFeature = poligonos[id];
+      /* Seteo la descripcion acorde al filtro seleccionado */
+      switch (id) {
+        case "mapa_inundaciones_simple":
+          this.form.descripcion =
+            "Mapa simple de zonas inundables segun los cursos de agua de la zona";
+          break;
+        case "mapa_altitud":
+          this.form.descripcion =
+            "Mapa de las altitudes del terreno segun la zona y nivel de riesgo de inundacion";
+          break;
+        default:
+          info = "Mapa estandar de la ciudad de La Plata";
+          break;
+      }
+      // console.log(this.geojsonFeature);
+
       this.jsonLayer = L.geoJSON(this.geojsonFeature, {
         style: this.style
       }).addTo(this.map);
@@ -245,7 +241,7 @@ export default {
         const results = await provider.search({ query: this.form.search });
         // console.log(results); // results es un array
         const { x: lng, y: lat, label: address } = results[0];
-        console.log(results[0].raw);
+        // console.log(results[0].raw);
         this.setMarker(address, lng, lat);
       }
     }
@@ -259,9 +255,16 @@ export default {
   margin: 20px auto;
   width: 95%;
   display: flex;
+  column-gap: 10px;
 }
 
 #barraBusqueda input {
-  margin-right: 10px;
+  /* margin-right: 10px; */
+}
+
+p {
+  display: inline-block;
+  /* margin-top: 0.5rem; */
+  margin-bottom: 0.5rem;
 }
 </style>
