@@ -84,7 +84,6 @@ const getDetalle = (address, info) => {
             </ul>
           </div>`;
 };
-const defaultInfo = "Ciudad de la plata";
 const legend = L.control({ position: "topright" });
 
 export default {
@@ -105,7 +104,6 @@ export default {
       marker: latLng(-34.920457, -57.953536),
       geojsonFeature: {},
       jsonLayer: null,
-      infoText: defaultInfo,
       form: {
         search: "",
         mapa_id: "mapa",
@@ -170,7 +168,7 @@ export default {
     setLegend() {
       /* legend es una const global del script */
       legend.onAdd = map => {
-        var div = L.DomUtil.create("div", "info legend"),
+        let div = L.DomUtil.create("div", "info legend"),
           grades = [0, 10, 20, 30],
           labels = [];
         switch (this.form.mapa_id) {
@@ -196,12 +194,12 @@ export default {
             }
             break;
           default:
+            console.log("ola");
             break;
         }
 
         return div;
       };
-
       legend.addTo(this.map);
     },
     setMapFilter() {
@@ -219,14 +217,13 @@ export default {
         case "mapa_inundaciones_simple":
           this.form.descripcion =
             "Mapa simple de zonas inundables segun los cursos de agua de la zona";
-          this.infoText = ``;
           break;
         case "mapa_altitud":
           this.form.descripcion =
             "Mapa de las altitudes del terreno segun la zona y nivel de riesgo de inundacion";
           break;
         default:
-          info = "Mapa estandar de la ciudad de La Plata";
+          this.form.descripcion = "Mapa estandar de la ciudad de La Plata";
           break;
       }
       this.setLegend();
