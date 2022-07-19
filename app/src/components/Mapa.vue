@@ -11,7 +11,7 @@
           id="direccion"
           type="text"
           v-model="form.search"
-          placeholder="Av. 44 y 7"
+          placeholder="Numero, Calle, Ciudad"
           @keyup="searchAddress"
         />
         <!-- <div id="direccion"></div> -->
@@ -32,7 +32,7 @@
           <!-- <option value="mapa_altitud">Mapa de altitud</option> -->
         </select>
         <label for="descripcion-filtro">Descripcion: </label>
-        <p id="descripcion">{{ form.descripcion }}</p>
+        {{ form.descripcion }}
       </div>
     </div>
     <div id="map-container" style="height: 800px; width: 100%">
@@ -48,7 +48,16 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
-        <l-control position="bottomleft"></l-control>
+        <!-- <l-control position="topright">
+          <div id="map-data-descriptor">
+            <span
+              ><b
+                >Informacion: <br />
+                {{ infoText }}</b
+              ></span
+            >
+          </div>
+        </l-control> -->
       </l-map>
       <div class="m-3">
         <router-link class="btn btn-light" to="/">Volver</router-link>
@@ -75,6 +84,8 @@ const getDetalle = (address, info) => {
             </ul>
           </div>`;
 };
+const defaultInfo = "Ciudad de la plata";
+const legend = L.control({ position: "topright" });
 
 export default {
   name: "Mapa",
@@ -94,6 +105,7 @@ export default {
       marker: latLng(-34.920457, -57.953536),
       geojsonFeature: {},
       jsonLayer: null,
+      infoText: defaultInfo,
       form: {
         search: "",
         mapa_id: "mapa",
@@ -155,18 +167,42 @@ export default {
       this.marker = new L.marker([lat, lng]).addTo(this.map);
       this.marker.bindPopup(detalle).openPopup();
     },
-    async onMapClick(e) {
-      let latlng = e.latlng;
+    setLegend() {
+      /* legend es una const global del script */
+      legend.onAdd = map => {
+        var div = L.DomUtil.create("div", "info legend"),
+          grades = [0, 10, 20, 30],
+          labels = [];
+        switch (this.form.mapa_id) {
+          case "mapa_inundaciones_simple":
+            div.innerHTML += "<h5>Nivel de riesgo de inundacion:</h5>";
+            div.innerHTML +=
+              "<i style='background:blue'></i> Muy probable </br>";
+            div.innerHTML +=
+              "<i style='background: rgba(228, 225, 225, 0.8);'></i> Poco probable";
+            break;
+          case "mapa_altitud":
+            // loop through our density intervals and generate a label with a colored square for each interval
+            div.innerHTML += "<h5>Niveles de altitud:</h5>";
+            for (var i = 0; i < grades.length; i++) {
+              div.innerHTML +=
+                '<i style="background:' +
+                this.getColor(grades[i] + 1) +
+                '"></i> ' +
+                grades[i] +
+                (grades[i + 1]
+                  ? "&ndash;" + grades[i + 1] + " m" + "<br>"
+                  : "+ m");
+            }
+            break;
+          default:
+            break;
+        }
 
-      let address;
-      await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          address = data.display_name;
-        });
-      this.setMarker(address, latlng.lng, latlng.lat);
+        return div;
+      };
+
+      legend.addTo(this.map);
     },
     setMapFilter() {
       if (this.jsonLayer) {
@@ -183,6 +219,7 @@ export default {
         case "mapa_inundaciones_simple":
           this.form.descripcion =
             "Mapa simple de zonas inundables segun los cursos de agua de la zona";
+          this.infoText = ``;
           break;
         case "mapa_altitud":
           this.form.descripcion =
@@ -192,11 +229,34 @@ export default {
           info = "Mapa estandar de la ciudad de La Plata";
           break;
       }
+      this.setLegend();
       // console.log(this.geojsonFeature);
 
       this.jsonLayer = L.geoJSON(this.geojsonFeature, {
         style: this.style
       }).addTo(this.map);
+    },
+    async onMapClick(e) {
+      let latlng = e.latlng;
+
+      let address;
+      await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`
+      )
+        .then(response => response.json())
+        .then(data => {
+          address = data.display_name;
+        });
+      this.setMarker(address, latlng.lng, latlng.lat);
+    },
+    async searchAddress(e) {
+      if (e.key == "Enter") {
+        const results = await provider.search({ query: this.form.search });
+        // console.log(results); // results es un array
+        const { x: lng, y: lat, label: address } = results[0];
+        // console.log(results[0].raw);
+        this.setMarker(address, lng, lat);
+      }
     },
     getColor(d) {
       /*  return d > 1000
@@ -214,7 +274,7 @@ export default {
         : d > 10
         ? "#FED976"
         : "#FFEDA0"; */
-      return d > 30 ? "#orange" : d > 20 ? "yellow" : d > 10 ? "green" : "blue";
+      return d > 30 ? "orange" : d > 20 ? "yellow" : d > 10 ? "green" : "blue";
     },
     style(feature) {
       let style = {
@@ -235,15 +295,6 @@ export default {
           break;
       }
       return style;
-    },
-    async searchAddress(e) {
-      if (e.key == "Enter") {
-        const results = await provider.search({ query: this.form.search });
-        // console.log(results); // results es un array
-        const { x: lng, y: lat, label: address } = results[0];
-        // console.log(results[0].raw);
-        this.setMarker(address, lng, lat);
-      }
     }
   }
 };
@@ -262,9 +313,33 @@ export default {
   /* margin-right: 10px; */
 }
 
-p {
-  display: inline-block;
-  /* margin-top: 0.5rem; */
-  margin-bottom: 0.5rem;
+#map-data-descriptor {
+  background-color: rgb(255, 255, 255);
+  min-width: min-content;
+  padding: 0 1rem;
+}
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  /* background: white; */
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+.info h5 {
+  margin: 0 0 5px;
+  color: rgb(0, 0, 0);
+}
+.legend {
+  line-height: 18px;
+  color: #555;
+  text-align: left;
+}
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
 }
 </style>
