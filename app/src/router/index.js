@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "@/components/Home";
 import Mapa from "@/components/Mapa";
 import Recomendaciones from "@/components/Recomendaciones";
+import Ayuda from "@/components/Ayuda";
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ export default new Router({
       path: "/recomendaciones",
       name: "Recomendaciones",
       component: Recomendaciones
+    },
+    {
+      path: "/ayuda",
+      name: "Ayuda",
+      component: Ayuda
     }
   ],
   scrollBehavior(to, from, savedPosition) {

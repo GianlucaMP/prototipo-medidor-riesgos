@@ -12,6 +12,9 @@
           <li>
             <router-link to="/recomendaciones">Recomendaciones</router-link>
           </li>
+          <li>
+            <router-link to="/ayuda">Ayuda</router-link>
+          </li>
         </ul>
       </div>
     </nav>
@@ -35,5 +38,10 @@ export default {
   text-align: center;
   /* color: #2c3e50; */
   /* margin-top: 60px; */
+}
+
+nav {
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>
