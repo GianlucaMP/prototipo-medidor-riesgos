@@ -30,7 +30,7 @@
       <li>
         <h5>Ayuda</h5>
         <p>
-          Secicion destinada a las preguntas frecuentes y explicar en detalle
+          Seccion destinada a las preguntas frecuentes y explicar en detalle
           como usar las funcionalidades del sitio
         </p>
       </li>
@@ -60,5 +60,17 @@ export default {
 
 .home-list li {
   max-width: 20%;
+  background-color: #353b41bd; /* color del sitio #343a40 */
+  padding: 10px;
+  border-radius: 10px;
+  color: #000000;
+}
+
+.home-list h5 {
+  color: #ffffff;
+}
+
+h1 {
+  margin-top: 10px;
 }
 </style>
