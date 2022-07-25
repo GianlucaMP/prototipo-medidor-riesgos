@@ -74,7 +74,7 @@ h1 {
   margin-top: 10px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .home {
     display: flex;
     flex-direction: column;
@@ -86,11 +86,13 @@ h1 {
     padding-left: 0%;
     margin-bottom: 0%;
     -webkit-align-items: center;
+    min-height: 600px;
     /* background-color: aqua; */
   }
 
   .home-list li {
-    max-width: 80%;
+    /* max-width: 80%; */
+    min-width: 80%;
     /* margin: auto auto; */
   }
 }

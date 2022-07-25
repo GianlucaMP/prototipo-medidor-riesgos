@@ -306,9 +306,9 @@ export default {
   column-gap: 10px;
 }
 
-/* #barraBusqueda input {
-  margin-right: 10px;
-} */
+#barraBusqueda label {
+  font-weight: bold;
+}
 
 #map-container {
   height: 800px;
@@ -353,6 +353,14 @@ export default {
   #barraBusqueda {
     flex-direction: column;
     /* background-color: aqua; */
+    padding: 0.5rem;
+    border: 2px solid #555;
+    border-radius: 8px;
+  }
+
+  #barraBusqueda label {
+    margin-top: 0.5rem;
+    margin-bottom: 0rem;
   }
   .bar-container {
     flex-grow: 1;
