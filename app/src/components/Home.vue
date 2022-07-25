@@ -73,4 +73,25 @@ export default {
 h1 {
   margin-top: 10px;
 }
+
+@media (max-width: 1024px) {
+  .home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .home-list {
+    flex-grow: 1;
+    flex-direction: column;
+    padding-left: 0%;
+    margin-bottom: 0%;
+    -webkit-align-items: center;
+    /* background-color: aqua; */
+  }
+
+  .home-list li {
+    max-width: 80%;
+    /* margin: auto auto; */
+  }
+}
 </style>

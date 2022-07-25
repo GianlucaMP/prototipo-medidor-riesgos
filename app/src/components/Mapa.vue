@@ -4,7 +4,7 @@
       Availability
     </router-link> -->
     <h1>Hola, aqui podras ver un mapa con la informacion sobre el terreno</h1>
-    <div class="">
+    <div class="bar-container">
       <div id="barraBusqueda">
         <label for="direccion">Buscar Direccion: </label>
         <input
@@ -35,7 +35,7 @@
         {{ form.descripcion }}
       </div>
     </div>
-    <div id="map-container" style="height: 800px; width: 100%">
+    <div id="map-container">
       <!-- <div style="height: 200px overflow: auto;"></div> -->
       <l-map
         ref="map"
@@ -310,6 +310,11 @@ export default {
   /* margin-right: 10px; */
 }
 
+#map-container {
+  height: 800px;
+  width: 90%;
+}
+
 #map-data-descriptor {
   background-color: rgb(255, 255, 255);
   min-width: min-content;
@@ -338,5 +343,25 @@ export default {
   float: left;
   margin-right: 8px;
   opacity: 0.7;
+}
+
+@media screen and (max-width: 1024px) {
+  .about {
+    display: flex;
+    flex-direction: column;
+  }
+  #barraBusqueda {
+    flex-direction: column;
+    /* background-color: aqua; */
+  }
+  .bar-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  #map-container {
+    height: 400px;
+    margin: auto;
+  }
 }
 </style>

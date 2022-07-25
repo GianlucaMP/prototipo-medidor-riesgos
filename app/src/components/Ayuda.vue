@@ -72,4 +72,8 @@ export default {
 ul {
   list-style: none;
 }
+
+#lista h5 {
+  /* border: ; */
+}
 </style>
