@@ -7,31 +7,46 @@
     </h4>
     <ul id="lista">
       <li @click="toggleView">
+        <span class="material-symbols-outlined">
+          {{ icons[0] }}
+        </span>
         <h5>Como uso el mapa?</h5>
-        <p v-show="visibility[0]">
-          Sencillo, selecciona el filtro de altitud o inundabilidad segun tu
-          interes, ingresas una direccion en el buscador de direcciones, le das
-          a enter y listo, un marcador aparecera en el mapa. Tambien podes hacer
-          que el marcador aparezca directamente haciendo click sobre el lugar de
-          tu interes en el mapa.
-        </p>
+        <transition name="fade">
+          <p v-show="visibility[0]">
+            Sencillo, selecciona el filtro de altitud o inundabilidad segun tu
+            interes, ingresas una direccion en el buscador de direcciones, le
+            das a enter y listo, un marcador aparecera en el mapa. Tambien podes
+            hacer que el marcador aparezca directamente haciendo click sobre el
+            lugar de tu interes en el mapa.
+          </p>
+        </transition>
       </li>
       <li @click="toggleView">
+        <span class="material-symbols-outlined">
+          {{ icons[1] }}
+        </span>
         <h5>Como ingreso una direccion?</h5>
-        <p v-show="visibility[1]">
-          Si deseas usar la entrada de texto para buscar la direccion, es
-          recomendable usar el formato (numero, calle, ciudad). Tambien podes
-          navegar en el mapa interactivo y marcar el lugar haciendo click
-        </p>
+        <transition name="fade">
+          <p v-show="visibility[1]">
+            Si deseas usar la entrada de texto para buscar la direccion, es
+            recomendable usar el formato (numero, calle, ciudad). Tambien podes
+            navegar en el mapa interactivo y marcar el lugar haciendo click
+          </p>
+        </transition>
       </li>
       <li @click="toggleView">
+        <span class="material-symbols-outlined">
+          {{ icons[2] }}
+        </span>
         <h5>Que dice en el detalle de cada marcador?</h5>
-        <p v-show="visibility[2]">
-          Dice la direccion del lugar marcado, el nivel de inundabilidad o
-          altura segun que filtro se haya selecicnado. En ambos casos hay un
-          enlace <a href="#">Ver Mas...</a> que te redirige al detalle de la
-          recomendacion de seguridad para la construccion en el lugar
-        </p>
+        <transition name="fade">
+          <p v-show="visibility[2]">
+            Dice la direccion del lugar marcado, el nivel de inundabilidad o
+            altura segun que filtro se haya selecicnado. En ambos casos hay un
+            enlace <a href="#">Ver Mas...</a> que te redirige al detalle de la
+            recomendacion de seguridad para la construccion en el lugar
+          </p>
+        </transition>
       </li>
     </ul>
   </div>
@@ -39,6 +54,8 @@
 
 <script>
 import Vue from "vue";
+const expand_more = "expand_more";
+const expand_less = "expand_less";
 
 export default {
   name: "Ayuda",
@@ -46,7 +63,7 @@ export default {
     return {
       items: [],
       visibility: [false, false, false],
-      test: true
+      icons: [expand_more, expand_more, expand_more]
     };
   },
   created() {},
@@ -58,6 +75,11 @@ export default {
       let index = items.indexOf(li);
       this.test = !this.test;
       this.$set(this.visibility, index, !this.visibility[index]); //Shorthand de Vue.set
+      if (this.visibility[index]) {
+        this.icons[index] = expand_less;
+      } else {
+        this.icons[index] = expand_more;
+      }
     }
   }
 };
@@ -75,5 +97,15 @@ ul {
 
 #lista h5 {
   /* border: ; */
+  display: inline-block;
+}
+
+/* Efectos de prueba */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

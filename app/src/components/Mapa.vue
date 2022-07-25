@@ -306,9 +306,9 @@ export default {
   column-gap: 10px;
 }
 
-#barraBusqueda input {
-  /* margin-right: 10px; */
-}
+/* #barraBusqueda input {
+  margin-right: 10px;
+} */
 
 #map-container {
   height: 800px;
