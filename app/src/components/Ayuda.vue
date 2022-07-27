@@ -91,7 +91,7 @@ export default {
   margin-left: 30px;
   padding-left: 0; /* Bootstrap por defecto te pone padding de 40px */
 }
-ul {
+#lista {
   list-style: none;
 }
 
@@ -107,5 +107,17 @@ ul {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  #lista {
+    padding-left: 0%;
+  }
+  #lista h5 {
+    max-width: 330px;
+  }
+  #lista span {
+    float: inline-start;
+  }
 }
 </style>
