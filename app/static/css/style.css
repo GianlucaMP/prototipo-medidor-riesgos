@@ -108,19 +108,6 @@ a {
   width: 100%;
 }
 
-.column {
-  float: left;
-  width: 32%;
-  margin-left: 20px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
 /* media screen o media queries -> cuando la resolución sea menor a lo puesto, cambia el diseño */
 @media screen and (max-width: 1024px) {
   .section1 .col,
