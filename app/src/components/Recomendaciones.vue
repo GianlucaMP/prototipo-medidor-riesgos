@@ -1,12 +1,12 @@
-+<template>
+<template>
   <div class="recomendaciones">
     <h1>Recomendaciones</h1>
     <div class="row">
       <div class="categorias">
         <h2>Categorías</h2>
         <ul id="lista">
-          <li>
-            <h5>General</h5>
+          <li @click="toggleView">
+            <p style="font-size: 1.4rem" @click="cambiarCategoria('General')">General</p>
           </li>
           <li @click="toggleView">
             <span class="material-symbols-outlined">
@@ -15,8 +15,8 @@
             <h5>Inundabilidad</h5>
             <transition name="fade">
               <div v-show="visibility[0]">
-                <p>Muy probable</p>
-                <p>Poco probable</p>
+                <p @click="cambiarCategoria('Muy probable')">Muy probable</p>
+                <p @click="cambiarCategoria('Poco probable')">Poco probable</p>
               </div>
             </transition>
           </li>
@@ -27,10 +27,10 @@
             <h5>Altitud</h5>
             <transition name="fade">
               <div v-show="visibility[1]">
-                <p>0 - 10 m</p>
-                <p>10 - 20 m</p>
-                <p>20 - 30 m</p>
-                <p>30+ m</p>
+                <p @click="cambiarCategoria('0-10m')">0 - 10 m</p>
+                <p @click="cambiarCategoria('10-20m')">10 - 20 m</p>
+                <p @click="cambiarCategoria('10-20m')">10 - 20 m</p>
+                <p @click="cambiarCategoria('30+m')">30+ m</p>
               </div>
             </transition>
           </li>
@@ -41,26 +41,16 @@
           v-bind:src="require('../assets/proxy.jpg')"
           alt="Imagen de ejemplo"
         />
-        <h4>Recomendación 1</h4>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
+        <h4>{{ recActual[0].title }}</h4>
+        <p>{{ recActual[0].text }}</p>
       </div>
       <div class="column">
         <img
           v-bind:src="require('../assets/proxy.jpg')"
           alt="Imagen de ejemplo"
         />
-        <h4>Recomendación 2</h4>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
+        <h4>{{ recActual[1].title }}</h4>
+        <p>{{ recActual[1].text }}</p>
       </div>
     </div>
   </div>
@@ -78,7 +68,16 @@ export default {
       msg: "Recomendaciones",
       items: [],
       visibility: [false, false, false],
-      icons: [expand_more, expand_more, expand_more]
+      icons: [expand_more, expand_more, expand_more],
+      catActual: "General",
+      recActual: [{title:'General A', text: 'texto rec a', img: ''}, {title: 'General B', text: 'texto rec B', img: ''}],
+      recGeneral: [{title: 'General A', text: 'texto rec a', img: ''}, {title: 'General B', text: 'texto rec B', img: ''}],
+      recMuyProbable: [{title: 'Muy Probable A', text: 'texto rec a', img: ''}, {title: 'Muy Probable B', text: 'texto rec B', img: ''}],
+      recPocoProbable: [{title: 'Poco Probable A', text: 'texto rec a', img: ''}, {title: 'Poco Probable B', text: 'texto rec B', img: ''}],
+      rec0_10m: [{title: '0_10m A', text: 'texto rec a', img: ''}, {title: '0_10m B', text: 'texto rec B', img: ''}],
+      rec10_20m: [{title: '10_20m A', text: 'texto rec a', img: ''}, {title: '10_20m B', text: 'texto rec B', img: ''}],
+      rec20_30m: [{title: '20_30m A', text: 'texto rec a', img: ''}, {title: '20_30m B', text: 'texto rec B', img: ''}],
+      rec30m: [{title: '30+m A', text: 'texto rec a', img: ''}, {title: '30+m B', text: 'texto rec B', img: ''}]
     };
   },
   created() {},
@@ -95,6 +94,16 @@ export default {
       } else {
         this.icons[index] = expand_more;
       }
+    },
+    cambiarCategoria(cat){
+      this.catActual = cat;
+      if (cat==='General') this.recActual = this.recGeneral;
+      else if (cat==='Muy probable') this.recActual = this.recMuyProbable;
+      else if (cat==='Poco probable') this.recActual = this.recPocoProbable;
+      else if (cat==='0-10m') this.recActual = this.rec0_10m;
+      else if (cat==='10-20m') this.recActual = this.rec10_20m;
+      else if (cat==='20-30m') this.recActual = this.rec20_30m;
+      else if (cat==='30+m') this.recActual = this.rec30m;
     }
   }
 };
