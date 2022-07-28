@@ -5,7 +5,7 @@
       <div class="categorias">
         <h2>Categorías</h2>
         <ul id="lista">
-          <li @click="toggleView">
+          <li>
             <h5>General</h5>
           </li>
           <li @click="toggleView">
@@ -87,7 +87,7 @@ export default {
       let li = e.target.closest("li");
       let ul = document.getElementById("lista");
       let items = Array.from(ul.children); // alternativa a ul -> li.closest('ul').children
-      let index = items.indexOf(li);
+      let index = items.indexOf(li) - 1;  //-1 para corregir por la categoría "general"
       this.test = !this.test;   //???
       this.$set(this.visibility, index, !this.visibility[index]); //Shorthand de Vue.set
       if (this.visibility[index]) {
