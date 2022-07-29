@@ -6,33 +6,37 @@
         <h2>Categorías</h2>
         <ul id="lista">
           <li @click="toggleView">
-            <p style="font-size: 1.4rem" @click="cambiarCategoria('General')">General</p>
+            <button style="font-size: 1.4rem" @click="cambiarCategoria('General')">General</button>
           </li>
           <li @click="toggleView">
-            <span class="material-symbols-outlined">
+            <button class="material-symbols-outlined no-border">
               {{ icons[0] }}
-            </span>
+            </button>
             <h5>Inundabilidad</h5>
-            <transition name="fade">
-              <div v-show="visibility[0]">
-                <p @click="cambiarCategoria('Muy probable')">Muy probable</p>
-                <p @click="cambiarCategoria('Poco probable')">Poco probable</p>
-              </div>
-            </transition>
+            <ul>
+              <transition name="fade">
+                <div v-show="visibility[0]">
+                  <li><button @click="cambiarCategoria('Muy probable')">Muy probable</button></li>
+                  <li><button @click="cambiarCategoria('Poco probable')">Poco probable</button></li>
+                </div>
+              </transition>
+            </ul>
           </li>
           <li @click="toggleView">
-            <span class="material-symbols-outlined">
+            <button class="material-symbols-outlined no-border">
               {{ icons[1] }}
-            </span>
+            </button>
             <h5>Altitud</h5>
-            <transition name="fade">
-              <div v-show="visibility[1]">
-                <p @click="cambiarCategoria('0-10m')">0 - 10 m</p>
-                <p @click="cambiarCategoria('10-20m')">10 - 20 m</p>
-                <p @click="cambiarCategoria('10-20m')">10 - 20 m</p>
-                <p @click="cambiarCategoria('30+m')">30+ m</p>
-              </div>
-            </transition>
+            <ul>
+              <transition name="fade">
+                <div v-show="visibility[1]">
+                  <li><button @click="cambiarCategoria('0-10m')">0 - 10 m</button></li>
+                  <li><button @click="cambiarCategoria('10-20m')">10 - 20 m</button></li>
+                  <li><button @click="cambiarCategoria('10-20m')">10 - 20 m</button></li>
+                  <li><button @click="cambiarCategoria('30+m')">30+ m</button></li>
+                </div>
+              </transition>
+            </ul>
           </li>
         </ul>
       </div>
@@ -131,6 +135,12 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+li button{
+  padding: 0;
+  border: none;
+  background: none;
 }
 
 .categorias{

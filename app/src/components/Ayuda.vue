@@ -7,9 +7,9 @@
     </h4>
     <ul id="lista">
       <li @click="toggleView">
-        <span class="material-symbols-outlined">
+        <button class="material-symbols-outlined no-border">
           {{ icons[0] }}
-        </span>
+        </button>
         <h5>Como uso el mapa?</h5>
         <transition name="fade">
           <p v-show="visibility[0]">
@@ -22,9 +22,9 @@
         </transition>
       </li>
       <li @click="toggleView">
-        <span class="material-symbols-outlined">
+        <button class="material-symbols-outlined no-border">
           {{ icons[1] }}
-        </span>
+        </button>
         <h5>Como ingreso una direccion?</h5>
         <transition name="fade">
           <p v-show="visibility[1]">
@@ -35,9 +35,9 @@
         </transition>
       </li>
       <li @click="toggleView">
-        <span class="material-symbols-outlined">
+        <button class="material-symbols-outlined no-border">
           {{ icons[2] }}
-        </span>
+        </button>
         <h5>Que dice en el detalle de cada marcador?</h5>
         <transition name="fade">
           <p v-show="visibility[2]">
@@ -98,6 +98,11 @@ export default {
 #lista h5 {
   /* border: ; */
   display: inline-block;
+}
+.no-border {
+  padding: 0;
+  border: none;
+  background: none;
 }
 
 /* Efectos de prueba */

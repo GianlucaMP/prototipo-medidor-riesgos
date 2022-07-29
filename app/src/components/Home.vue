@@ -6,34 +6,34 @@
       construir o adquirir un terreno
     </h4>
     <ul class="home-list">
-      <li>
+      <li><button>
         <h5>Inicio</h5>
-        <p>
+        <p class="white">
           Es la seccion que estas viendo ahora mismo, explica el proposito del
           sitio
         </p>
-      </li>
-      <li>
+      </button></li>
+      <li><button>
         <h5>Mapa</h5>
-        <p>
+        <p class="white">
           Seccion con un mapa interactivo donde podras seleccionar direcciones y
           ver las recomendaciones correspondientes por altitudes o inundabilidad
         </p>
-      </li>
-      <li>
+      </button></li>
+      <li><button>
         <h5>Recomendaciones</h5>
-        <p>
+        <p class="white">
           Seccion donde podras leer en mayor detalle las recomendaciones
           brindadas por el mapa
         </p>
-      </li>
-      <li>
+      </button></li>
+      <li><button>
         <h5>Ayuda</h5>
-        <p>
+        <p class="white">
           Seccion destinada a las preguntas frecuentes y explicar en detalle
           como usar las funcionalidades del sitio
         </p>
-      </li>
+      </button></li>
     </ul>
   </div>
 </template>
@@ -50,6 +50,11 @@ export default {
 </script>
 
 <style>
+
+.white {
+  color: white;
+}
+
 .home-list {
   display: flex;
   justify-content: space-around;
