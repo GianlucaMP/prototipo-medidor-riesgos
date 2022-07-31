@@ -28,9 +28,6 @@
           aliquip ex ea commodo consequat.
         </p>
       </div>
-      <div class="m-3">
-        <router-link class="btn btn-light" to="/">Volver</router-link>
-      </div>
     </div>
   </div>
 </template>

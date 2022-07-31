@@ -96,7 +96,6 @@ export default {
 }
 
 #lista h5 {
-  /* border: ; */
   display: inline-block;
 }
 
@@ -113,11 +112,26 @@ export default {
   #lista {
     padding-left: 0%;
   }
-  #lista h5 {
-    max-width: 330px;
-  }
   #lista span {
     float: inline-start;
   }
 }
+
+@media screen and (min-width: 400px) and (max-width: 1024px) {
+  #lista h5 {
+    max-width: 95%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #lista h5 {
+    max-width: 80%;
+  }
+}
+
+/* @media screen and (max-width: 640px) {
+  #lista h5 {
+    max-width: 300px;
+  }
+} */
 </style>
