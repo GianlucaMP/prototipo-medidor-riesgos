@@ -32,7 +32,7 @@
           <!-- <option value="mapa_altitud">Mapa de altitud</option> -->
         </select>
         <label for="descripcion-filtro">Descripcion: </label>
-        {{ form.descripcion }}
+        <output id="descripcion-filtro"> {{ form.descripcion }} </output>
       </div>
     </div>
     <div id="map-container">
@@ -48,20 +48,85 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <!-- <l-marker :lat-lng="marker"></l-marker> -->
-        <!-- <l-control position="topright">
-          <div id="map-data-descriptor">
-            <span
-              ><b
-                >Informacion: <br />
-                {{ infoText }}</b
-              ></span
+        <l-control position="topright" class="m-1">
+          <template v-if="form.mapa_id == 'mapa_inundaciones_simple'">
+            <div class="info legend mb-1">
+              <h5>Nivel de riesgo de inundacion:</h5>
+              <i :style="{ background: color }"></i> Muy probable <br />
+              <i style="background: rgba(228, 225, 225, 0.8);"></i> Poco
+              probable <br />
+
+              <div class="mt-2">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-size: 18px;"
+                  @click="
+                    showColorConfig.inundaciones = !showColorConfig.inundaciones
+                  "
+                >
+                  settings
+                </span>
+                Configurar Colores
+              </div>
+            </div>
+            <div
+              class="info legend adjust-size"
+              v-show="showColorConfig.inundaciones"
             >
-          </div>
-        </l-control> -->
+              <h5>Configurar Colores:</h5>
+              <label for="color">Color 1:</label>
+              <input
+                id="color"
+                type="color"
+                v-model="color"
+                @change="setMapFilter"
+              />
+            </div>
+          </template>
+          <template v-else-if="form.mapa_id == 'mapa_altitud'">
+            <div class="info legend mb-1">
+              <h5>Niveles de altitud:</h5>
+              <template v-for="(grade, index) in valoresIniciales.grades">
+                <i :style="{ background: getColor(grade + 1) }"></i>{{ grade }}
+                <template v-if="valoresIniciales.grades[index + 1]">
+                  – {{ valoresIniciales.grades[index + 1] }}m<br />
+                </template>
+                <template v-else>
+                  +m
+                </template>
+              </template>
+              <div class="mt-2">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-size: 18px;"
+                  @click="
+                    showColorConfig.altitudes = !showColorConfig.altitudes
+                  "
+                >
+                  settings
+                </span>
+                Configurar Colores
+              </div>
+            </div>
+            <div class="info legend adjust-size" v-show="showColorConfig.altitudes">
+              <h5>Configurar Colores:</h5>
+              <ul
+                v-for="(color, index) in color_altitudes"
+                style="list-style: none;"
+              >
+                <li>
+                  <label for="">Color {{ index }}:</label>
+                  <input
+                    type="color"
+                    v-model="color_altitudes[index]"
+                    @change="setMapFilter"
+                  />
+                </li>
+              </ul>
+            </div>
+          </template>
+        </l-control>
       </l-map>
-      <div class="m-3">
-        <router-link class="btn btn-light" to="/">Volver</router-link>
-      </div>
     </div>
   </div>
 </template>
@@ -85,6 +150,7 @@ const getDetalle = (address, info) => {
           </div>`;
 };
 const legend = L.control({ position: "topright" });
+const defaultGrades = [0, 10, 20, 30];
 
 export default {
   name: "Mapa",
@@ -108,6 +174,17 @@ export default {
         search: "",
         mapa_id: "mapa",
         descripcion: "Mapa estandar de la ciudad de La Plata"
+      },
+      valoresIniciales: {
+        grades: defaultGrades,
+        color: "#0000ff", //azul
+        color_altitudes: ["#0000ff", "#008000", "#ffff00", "#ffa500"] //azul-verde-amarrillo-naranja en ese orden
+      },
+      color: "#0000ff",
+      color_altitudes: ["#0000ff", "#008000", "#ffff00", "#ffa500"],
+      showColorConfig: {
+        inundaciones: false,
+        altitudes: false
       }
     };
   },
@@ -117,7 +194,16 @@ export default {
       this.map = this.$refs.map.mapObject;
     });
   },
+  computed: {},
   methods: {
+    getGradeDetail(i) {
+      let grades = defaultGrades;
+      let string =
+        grades[i] +
+        (grades[i + 1] ? "&ndash;" + grades[i + 1] + "m" + "<br>" : "+ m");
+
+      return `<template> ${string} </template>`;
+    },
     zoomUpdated(zoom) {
       this.zoom = zoom;
     },
@@ -174,8 +260,7 @@ export default {
         switch (this.form.mapa_id) {
           case "mapa_inundaciones_simple":
             div.innerHTML += "<h5>Nivel de riesgo de inundacion:</h5>";
-            div.innerHTML +=
-              "<i style='background:blue'></i> Muy probable </br>";
+            div.innerHTML += `<i style='background:${this.color}'></i> Muy probable </br>`;
             div.innerHTML +=
               "<i style='background: rgba(228, 225, 225, 0.8);'></i> Poco probable";
             break;
@@ -226,7 +311,7 @@ export default {
           this.form.descripcion = "Mapa estandar de la ciudad de La Plata";
           break;
       }
-      this.setLegend();
+      // this.setLegend();
       // console.log(this.geojsonFeature);
 
       this.jsonLayer = L.geoJSON(this.geojsonFeature, {
@@ -256,22 +341,13 @@ export default {
       }
     },
     getColor(d) {
-      /*  return d > 1000
-        ? "#800026"
-        : d > 500
-        ? "#BD0026"
-        : d > 200
-        ? "#E31A1C"
-        : d > 100
-        ? "#FC4E2A"
-        : d > 50
-        ? "#FD8D3C"
+      return d > 30
+        ? this.color_altitudes[3] //naranja
         : d > 20
-        ? "#FEB24C"
+        ? this.color_altitudes[2] //amarillo
         : d > 10
-        ? "#FED976"
-        : "#FFEDA0"; */
-      return d > 30 ? "orange" : d > 20 ? "yellow" : d > 10 ? "green" : "blue";
+        ? this.color_altitudes[1] //verde
+        : this.color_altitudes[0]; //azul
     },
     style(feature) {
       let style = {
@@ -283,11 +359,14 @@ export default {
         dashArray: "3",
         fillOpacity: 0.3
       };
+      console.log(this.form.mapa_id);
       switch (this.form.mapa_id) {
         case "mapa_inundaciones_simple":
-          style.fillColor = "blue";
+          style.fillColor = this.color;
+          break;
         case "mapa_altitud":
           style.fillColor = this.getColor(feature.properties.altura);
+          break;
         default:
           break;
       }
@@ -345,6 +424,14 @@ export default {
   opacity: 0.7;
 }
 
+.test {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
 @media screen and (max-width: 1024px) {
   .about {
     display: flex;
@@ -370,6 +457,10 @@ export default {
   #map-container {
     height: 400px;
     margin: auto;
+  }
+  .adjust-size {
+    max-height: 160px;
+    overflow: auto;
   }
 }
 </style>

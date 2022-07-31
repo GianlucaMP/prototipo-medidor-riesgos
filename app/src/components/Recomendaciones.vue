@@ -6,7 +6,12 @@
         <h2>Categorías</h2>
         <ul id="lista">
           <li @click="toggleView">
-            <button style="font-size: 1.4rem" @click="cambiarCategoria('General')">General</button>
+            <button
+              style="font-size: 1.4rem"
+              @click="cambiarCategoria('General')"
+            >
+              General
+            </button>
           </li>
           <li @click="toggleView">
             <button class="material-symbols-outlined no-border">
@@ -16,8 +21,16 @@
             <ul>
               <transition name="fade">
                 <div v-show="visibility[0]">
-                  <li><button @click="cambiarCategoria('Muy probable')">Muy probable</button></li>
-                  <li><button @click="cambiarCategoria('Poco probable')">Poco probable</button></li>
+                  <li>
+                    <button @click="cambiarCategoria('Muy probable')">
+                      Muy probable
+                    </button>
+                  </li>
+                  <li>
+                    <button @click="cambiarCategoria('Poco probable')">
+                      Poco probable
+                    </button>
+                  </li>
                 </div>
               </transition>
             </ul>
@@ -30,10 +43,22 @@
             <ul>
               <transition name="fade">
                 <div v-show="visibility[1]">
-                  <li><button @click="cambiarCategoria('0-10m')">0 - 10 m</button></li>
-                  <li><button @click="cambiarCategoria('10-20m')">10 - 20 m</button></li>
-                  <li><button @click="cambiarCategoria('10-20m')">10 - 20 m</button></li>
-                  <li><button @click="cambiarCategoria('30+m')">30+ m</button></li>
+                  <li>
+                    <button @click="cambiarCategoria('0-10m')">0 - 10 m</button>
+                  </li>
+                  <li>
+                    <button @click="cambiarCategoria('10-20m')">
+                      10 - 20 m
+                    </button>
+                  </li>
+                  <li>
+                    <button @click="cambiarCategoria('10-20m')">
+                      10 - 20 m
+                    </button>
+                  </li>
+                  <li>
+                    <button @click="cambiarCategoria('30+m')">30+ m</button>
+                  </li>
                 </div>
               </transition>
             </ul>
@@ -74,14 +99,38 @@ export default {
       visibility: [false, false, false],
       icons: [expand_more, expand_more, expand_more],
       catActual: "General",
-      recActual: [{title:'General A', text: 'texto rec a', img: ''}, {title: 'General B', text: 'texto rec B', img: ''}],
-      recGeneral: [{title: 'General A', text: 'texto rec a', img: ''}, {title: 'General B', text: 'texto rec B', img: ''}],
-      recMuyProbable: [{title: 'Muy Probable A', text: 'texto rec a', img: ''}, {title: 'Muy Probable B', text: 'texto rec B', img: ''}],
-      recPocoProbable: [{title: 'Poco Probable A', text: 'texto rec a', img: ''}, {title: 'Poco Probable B', text: 'texto rec B', img: ''}],
-      rec0_10m: [{title: '0_10m A', text: 'texto rec a', img: ''}, {title: '0_10m B', text: 'texto rec B', img: ''}],
-      rec10_20m: [{title: '10_20m A', text: 'texto rec a', img: ''}, {title: '10_20m B', text: 'texto rec B', img: ''}],
-      rec20_30m: [{title: '20_30m A', text: 'texto rec a', img: ''}, {title: '20_30m B', text: 'texto rec B', img: ''}],
-      rec30m: [{title: '30+m A', text: 'texto rec a', img: ''}, {title: '30+m B', text: 'texto rec B', img: ''}]
+      recActual: [
+        { title: "General A", text: "texto rec a", img: "" },
+        { title: "General B", text: "texto rec B", img: "" }
+      ],
+      recGeneral: [
+        { title: "General A", text: "texto rec a", img: "" },
+        { title: "General B", text: "texto rec B", img: "" }
+      ],
+      recMuyProbable: [
+        { title: "Muy Probable A", text: "texto rec a", img: "" },
+        { title: "Muy Probable B", text: "texto rec B", img: "" }
+      ],
+      recPocoProbable: [
+        { title: "Poco Probable A", text: "texto rec a", img: "" },
+        { title: "Poco Probable B", text: "texto rec B", img: "" }
+      ],
+      rec0_10m: [
+        { title: "0_10m A", text: "texto rec a", img: "" },
+        { title: "0_10m B", text: "texto rec B", img: "" }
+      ],
+      rec10_20m: [
+        { title: "10_20m A", text: "texto rec a", img: "" },
+        { title: "10_20m B", text: "texto rec B", img: "" }
+      ],
+      rec20_30m: [
+        { title: "20_30m A", text: "texto rec a", img: "" },
+        { title: "20_30m B", text: "texto rec B", img: "" }
+      ],
+      rec30m: [
+        { title: "30+m A", text: "texto rec a", img: "" },
+        { title: "30+m B", text: "texto rec B", img: "" }
+      ]
     };
   },
   created() {},
@@ -90,8 +139,8 @@ export default {
       let li = e.target.closest("li");
       let ul = document.getElementById("lista");
       let items = Array.from(ul.children); // alternativa a ul -> li.closest('ul').children
-      let index = items.indexOf(li) - 1;  //-1 para corregir por la categoría "general"
-      this.test = !this.test;   //???
+      let index = items.indexOf(li) - 1; //-1 para corregir por la categoría "general"
+      this.test = !this.test; //???
       this.$set(this.visibility, index, !this.visibility[index]); //Shorthand de Vue.set
       if (this.visibility[index]) {
         this.icons[index] = expand_less;
@@ -99,15 +148,15 @@ export default {
         this.icons[index] = expand_more;
       }
     },
-    cambiarCategoria(cat){
+    cambiarCategoria(cat) {
       this.catActual = cat;
-      if (cat==='General') this.recActual = this.recGeneral;
-      else if (cat==='Muy probable') this.recActual = this.recMuyProbable;
-      else if (cat==='Poco probable') this.recActual = this.recPocoProbable;
-      else if (cat==='0-10m') this.recActual = this.rec0_10m;
-      else if (cat==='10-20m') this.recActual = this.rec10_20m;
-      else if (cat==='20-30m') this.recActual = this.rec20_30m;
-      else if (cat==='30+m') this.recActual = this.rec30m;
+      if (cat === "General") this.recActual = this.recGeneral;
+      else if (cat === "Muy probable") this.recActual = this.recMuyProbable;
+      else if (cat === "Poco probable") this.recActual = this.recPocoProbable;
+      else if (cat === "0-10m") this.recActual = this.rec0_10m;
+      else if (cat === "10-20m") this.recActual = this.rec10_20m;
+      else if (cat === "20-30m") this.recActual = this.rec20_30m;
+      else if (cat === "30+m") this.recActual = this.rec30m;
     }
   }
 };
@@ -137,13 +186,13 @@ export default {
   opacity: 0;
 }
 
-li button{
+li button {
   padding: 0;
   border: none;
   background: none;
 }
 
-.categorias{
+.categorias {
   text-align: left;
   width: 18%;
   float: left;
@@ -175,4 +224,3 @@ li button{
   }
 }
 </style>
-
