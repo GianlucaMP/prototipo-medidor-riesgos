@@ -4,7 +4,7 @@
     <div class="row">
       <div class="categorias">
         <h2>Categorías</h2>
-        <ul id="lista">
+        <ul class="lista">
           <li @click="toggleView">
             <button
               style="font-size: 1.4rem"
@@ -52,8 +52,8 @@
                     </button>
                   </li>
                   <li>
-                    <button @click="cambiarCategoria('10-20m')">
-                      10 - 20 m
+                    <button @click="cambiarCategoria('20-30m')">
+                      20 - 30 m
                     </button>
                   </li>
                   <li>
@@ -62,6 +62,16 @@
                 </div>
               </transition>
             </ul>
+          </li>
+        </ul>
+
+        <h2>Fuentes</h2>
+        <ul class="lista">
+          <li>
+            <a
+              href="https://ebroresilience.com/wp-content/uploads/2020/02/guia-recomendaciones-construccion-y-rehabilitacion-edificaciones-zonas-inundables.pdf"
+              >RECOMENDACIONES PARA LA CONSTRUCCIÓN EN ZONAS INUNDABLES</a
+            >
           </li>
         </ul>
       </div>
@@ -100,35 +110,95 @@ export default {
       icons: [expand_more, expand_more, expand_more],
       catActual: "General",
       recActual: [
-        { title: "General A", text: "texto rec a", img: "" },
-        { title: "General B", text: "texto rec B", img: "" }
+        {
+          title: "Criterios generales",
+          text:
+            "Considerar la profundidad y la velocidad que puede llegar a tener el agua durante la inundación, así como la altura interior que puede alcanzar",
+          img: ""
+        },
+        {
+          title: "Elevación",
+          text:
+            "Una posible alternativa es valorar la opción de elevar el edificio o de las partes residenciales del mismo por encima de la cota de inundación. Para lograr esto existen alternativas como: colina o rellenos, muro perimetral de cimentación, muro perimetral no estanco o elevación sobre pilares o pilotes que forman parte de la estructura principal del edificio.",
+          img: ""
+        }
       ],
       recGeneral: [
-        { title: "General A", text: "texto rec a", img: "" },
-        { title: "General B", text: "texto rec B", img: "" }
+        {
+          title: "Criterios generales",
+          text:
+            "Considerar la profundidad y la velocidad que puede llegar a tener el agua durante la inundación, así como la altura interior que puede alcanzar",
+          img: ""
+        },
+        {
+          title: "Elevación",
+          text:
+            "Una posible alternativa es valorar la opción de elevar el edificio o de las partes residenciales del mismo por encima de la cota de inundación. Para lograr esto existen alternativas como: colina o rellenos, muro perimetral de cimentación, muro perimetral no estanco o elevación sobre pilares o pilotes que forman parte de la estructura principal del edificio.",
+          img: ""
+        }
       ],
       recMuyProbable: [
-        { title: "Muy Probable A", text: "texto rec a", img: "" },
-        { title: "Muy Probable B", text: "texto rec B", img: "" }
+        {
+          title: "Incorporar materiales resistentes al agua y a la corrosión",
+          text:
+            "Evitar el uso de pavimentos impermeables y priorizar superficies vegetadas que permitan la infiltración. Considerar corrosión en metales, materiales no solubles en agua, deformaciones en madera. Los sellos waterproof y water-resistant garantizan la idoneidad de los materiales.",
+          img: ""
+        },
+        {
+          title: "Instalaciones",
+          text:
+            "Elevar las mismas por encima de la cota máxima de inundación. Reubicar las instalaciones sensibles trasladándolas a plantas superiores o cubierta. • Proteger, estableciendo medidas de seguridad adicionales para aquellas instalaciones que irremediablemente queden por debajo de la cota de inundación.",
+          img: ""
+        }
       ],
       recPocoProbable: [
-        { title: "Poco Probable A", text: "texto rec a", img: "" },
+        {
+          title: "Barreras temporales",
+          text:
+            "Las barreras temporales son una solución adecuada para zonas con poco espacio, y en lugares donde la instalación de una barrera permanente pueda entorpecer el uso habitual del edificio. Entre ellas existen: sacos o elementos rellenos de agua o arena, diques hinchables, barreras modulares y compuertas estancas mecanizadas.",
+          img: ""
+        },
         { title: "Poco Probable B", text: "texto rec B", img: "" }
       ],
       rec0_10m: [
-        { title: "0_10m A", text: "texto rec a", img: "" },
-        { title: "0_10m B", text: "texto rec B", img: "" }
+        {
+          title: "Ubicación",
+          text:
+            "Buscar la ubicación más elevada posible, pudiendo incluso recurrir a la generación de montículos resistentes al agua mediante material de relleno debidamente compactado, siempre con la preceptiva aprobación, si se demuestra que no afecta a terceros",
+          img: ""
+        },
+        {
+          title: "Alineación",
+          text:
+            "Facilitar al máximo posible el principio de la transparencia hidráulica, que consiste en permitir de forma controlada el paso libre del agua a través de las edificaciones, sin obstruir su movimiento natural y presentando la menor superficie posible de oposición frente a la avenida, de modo que la dirección longitudinal del edificio coincida con la dirección principal de la corriente y se minimice la presión hidrostática sobre muros y cerramientos. ",
+          img: ""
+        }
       ],
       rec10_20m: [
-        { title: "10_20m A", text: "texto rec a", img: "" },
+        {
+          title: "Planificación",
+          text:
+            "Diseñar la instalación para poder utilizar elementos externos (vehículos eléctricos) como suministro de emergencia hasta el restablecimiento en caso de corte prolongado (energía necesaria para señales de socorro y servicios básicos). ",
+          img: ""
+        },
         { title: "10_20m B", text: "texto rec B", img: "" }
       ],
       rec20_30m: [
-        { title: "20_30m A", text: "texto rec a", img: "" },
+        {
+          title: "Planificación",
+          text:
+            "Diseñar la instalación para poder utilizar elementos externos (vehículos eléctricos) como suministro de emergencia hasta el restablecimiento en caso de corte prolongado (energía necesaria para señales de socorro y servicios básicos). ",
+          img: ""
+        },
         { title: "20_30m B", text: "texto rec B", img: "" }
       ],
       rec30m: [
-        { title: "30+m A", text: "texto rec a", img: "" },
+        {
+          title: "Planificación",
+          text:
+            "Diseñar la instalación para poder utilizar elementos externos (vehículos eléctricos) como suministro de emergencia hasta el restablecimiento en caso de corte prolongado (energía necesaria para señales de socorro y servicios básicos). ",
+          img: ""
+        },
         { title: "30+m B", text: "texto rec B", img: "" }
       ]
     };
@@ -137,10 +207,9 @@ export default {
   methods: {
     toggleView(e) {
       let li = e.target.closest("li");
-      let ul = document.getElementById("lista");
+      let ul = li.closest("ul"); // let ul = document.getElementById("lista");
       let items = Array.from(ul.children); // alternativa a ul -> li.closest('ul').children
       let index = items.indexOf(li) - 1; //-1 para corregir por la categoría "general"
-      this.test = !this.test; //???
       this.$set(this.visibility, index, !this.visibility[index]); //Shorthand de Vue.set
       if (this.visibility[index]) {
         this.icons[index] = expand_less;
@@ -168,13 +237,18 @@ export default {
   margin-left: 30px;
   padding-left: 0; /* Bootstrap por defecto te pone padding de 40px */
 }
-#lista {
+.lista {
   list-style: none;
 }
 
-#lista h5 {
-  /* border: ; */
+.lista h5 {
   display: inline-block;
+}
+
+.lista a {
+  text-decoration: none;
+  /* color: black;
+  font-weight: bolder; */
 }
 
 /* Efectos de prueba */
@@ -213,13 +287,13 @@ li button {
 }
 
 @media screen and (max-width: 1024px) {
-  #lista {
+  .lista {
     padding-left: 0%;
   }
-  #lista h5 {
+  .lista h5 {
     max-width: 330px;
   }
-  #lista span {
+  .lista span {
     float: inline-start;
   }
 }

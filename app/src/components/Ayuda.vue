@@ -73,7 +73,6 @@ export default {
       let ul = document.getElementById("lista");
       let items = Array.from(ul.children); // alternativa a ul -> li.closest('ul').children
       let index = items.indexOf(li);
-      this.test = !this.test;
       this.$set(this.visibility, index, !this.visibility[index]); //Shorthand de Vue.set
       if (this.visibility[index]) {
         this.icons[index] = expand_less;
