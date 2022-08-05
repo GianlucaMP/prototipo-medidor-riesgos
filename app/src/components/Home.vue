@@ -6,34 +6,44 @@
       construir o adquirir un terreno
     </h4>
     <ul class="home-list">
-      <li><button>
-        <h5>Inicio</h5>
-        <p class="white">
-          Es la seccion que estas viendo ahora mismo, explica el proposito del
-          sitio
-        </p>
-      </button></li>
-      <li><button>
-        <h5>Mapa</h5>
-        <p class="white">
-          Seccion con un mapa interactivo donde podras seleccionar direcciones y
-          ver las recomendaciones correspondientes por altitudes o inundabilidad
-        </p>
-      </button></li>
-      <li><button>
-        <h5>Recomendaciones</h5>
-        <p class="white">
-          Seccion donde podras leer en mayor detalle las recomendaciones
-          brindadas por el mapa
-        </p>
-      </button></li>
-      <li><button>
-        <h5>Ayuda</h5>
-        <p class="white">
-          Seccion destinada a las preguntas frecuentes y explicar en detalle
-          como usar las funcionalidades del sitio
-        </p>
-      </button></li>
+      <li>
+        <router-link to="/">
+          <h5>Inicio</h5>
+          <p class="white">
+            Es la seccion que estas viendo ahora mismo, explica el proposito del
+            sitio
+          </p>
+        </router-link>
+      </li>
+
+      <li>
+        <router-link to="/mapa">
+          <h5>Mapa</h5>
+          <p class="white">
+            Seccion con un mapa interactivo donde podras seleccionar direcciones
+            y ver las recomendaciones correspondientes por altitudes o
+            inundabilidad
+          </p>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/recomendaciones">
+          <h5>Recomendaciones</h5>
+          <p class="white">
+            Seccion donde podras leer en mayor detalle las recomendaciones
+            brindadas por el mapa
+          </p>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/ayuda">
+          <h5>Ayuda</h5>
+          <p class="white">
+            Seccion destinada a las preguntas frecuentes y explicar en detalle
+            como usar las funcionalidades del sitio
+          </p>
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
@@ -50,7 +60,6 @@ export default {
 </script>
 
 <style>
-
 .white {
   color: white;
 }
@@ -77,6 +86,11 @@ export default {
 
 h1 {
   margin-top: 10px;
+}
+
+a,
+a:hover {
+  text-decoration: none;
 }
 
 @media (max-width: 900px) {
