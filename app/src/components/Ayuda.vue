@@ -123,7 +123,7 @@ export default {
 
 @media screen and (min-width: 400px) and (max-width: 1024px) {
   #lista h5 {
-    max-width: 95%;
+    max-width: 90%;
   }
 }
 

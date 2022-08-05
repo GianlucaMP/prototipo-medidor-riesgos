@@ -2,7 +2,7 @@
   <div class="recomendaciones">
     <h1>Recomendaciones</h1>
     <div class="row">
-      <div class="categorias">
+      <div class="categorias column-responsive">
         <h2>Categorías</h2>
         <ul class="lista">
           <li @click="toggleView">
@@ -66,27 +66,43 @@
         </ul>
 
         <h2>Fuentes</h2>
-        <ul class="lista">
+        <ul class="lista fuentes">
           <li>
             <a
               href="https://ebroresilience.com/wp-content/uploads/2020/02/guia-recomendaciones-construccion-y-rehabilitacion-edificaciones-zonas-inundables.pdf"
-              >RECOMENDACIONES PARA LA CONSTRUCCIÓN EN ZONAS INUNDABLES</a
+              target="_blank"
+              >Recomendaciones para la construcción en zonas inundables</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://ri.conicet.gov.ar/bitstream/handle/11336/135214/CONICET_Digital_Nro.cbe5be43-6cc2-4ae8-bec5-5077dbf70a99_E.pdf?sequence=8&isAllowed=y"
+              target="_blank"
+              >Costas y cuencas de la Región Metropolitana de Buenos Aires:
+              estudios, planes y proyectos</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://es-ar.topographic-map.com/maps/fcxf/La-Plata/"
+              target="_blank"
+              >Topografia de La Plata</a
             >
           </li>
         </ul>
       </div>
-      <div class="column">
+      <div class="column column-responsive">
         <img
-          v-bind:src="require('../assets/proxy.jpg')"
-          alt="Imagen de ejemplo"
+          v-bind:src="require('../assets/img-prov-1.png')"
+          alt="Imagen provisoria 1"
         />
         <h4>{{ recActual[0].title }}</h4>
         <p>{{ recActual[0].text }}</p>
       </div>
-      <div class="column">
+      <div class="column column-responsive">
         <img
-          v-bind:src="require('../assets/proxy.jpg')"
-          alt="Imagen de ejemplo"
+          v-bind:src="require('../assets/img-prov-1.png')"
+          alt="Imagen provisoria 2"
         />
         <h4>{{ recActual[1].title }}</h4>
         <p>{{ recActual[1].text }}</p>
@@ -96,7 +112,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 const expand_more = "expand_more";
 const expand_less = "expand_less";
 
@@ -158,7 +173,12 @@ export default {
             "Las barreras temporales son una solución adecuada para zonas con poco espacio, y en lugares donde la instalación de una barrera permanente pueda entorpecer el uso habitual del edificio. Entre ellas existen: sacos o elementos rellenos de agua o arena, diques hinchables, barreras modulares y compuertas estancas mecanizadas.",
           img: ""
         },
-        { title: "Poco Probable B", text: "texto rec B", img: "" }
+        {
+          title: "Impermeabilización",
+          text:
+            "Se debe realizar preferentemente por la cara exterior del elemento para reducir el riesgo de inundación, se recomienda el uso de sistemas de membranas adheridas o de lámina compartimentada. Los principales métodos son lámina impermeabilizante colocada sobre el paramento existente y revestimiento exterior impermeable.",
+          img: ""
+        }
       ],
       rec0_10m: [
         {
@@ -181,7 +201,12 @@ export default {
             "Diseñar la instalación para poder utilizar elementos externos (vehículos eléctricos) como suministro de emergencia hasta el restablecimiento en caso de corte prolongado (energía necesaria para señales de socorro y servicios básicos). ",
           img: ""
         },
-        { title: "10_20m B", text: "texto rec B", img: "" }
+        {
+          title: "Alineación",
+          text:
+            "Facilitar al máximo posible el principio de la transparencia hidráulica, que consiste en permitir de forma controlada el paso libre del agua a través de las edificaciones, sin obstruir su movimiento natural y presentando la menor superficie posible de oposición frente a la avenida, de modo que la dirección longitudinal del edificio coincida con la dirección principal de la corriente y se minimice la presión hidrostática sobre muros y cerramientos. ",
+          img: ""
+        }
       ],
       rec20_30m: [
         {
@@ -190,7 +215,12 @@ export default {
             "Diseñar la instalación para poder utilizar elementos externos (vehículos eléctricos) como suministro de emergencia hasta el restablecimiento en caso de corte prolongado (energía necesaria para señales de socorro y servicios básicos). ",
           img: ""
         },
-        { title: "20_30m B", text: "texto rec B", img: "" }
+        {
+          title: "Depósito de agua",
+          text:
+            "Colocación de un depósito de agua por encima de la cota máxima de inundación para evitar la contaminación del agua potable y garantizar el suministro. Deben disponer de sistemas de cierre hermético y estar protegidos de la contaminación aérea.",
+          img: ""
+        }
       ],
       rec30m: [
         {
@@ -199,7 +229,12 @@ export default {
             "Diseñar la instalación para poder utilizar elementos externos (vehículos eléctricos) como suministro de emergencia hasta el restablecimiento en caso de corte prolongado (energía necesaria para señales de socorro y servicios básicos). ",
           img: ""
         },
-        { title: "30+m B", text: "texto rec B", img: "" }
+        {
+          title: "Instalaciones",
+          text:
+            "Evitar disponer instalaciones o aparatos electrónicos en las plantas bajas. Convendrá ubicar las instalaciones eléctricas en cubierta o en planta técnica, por encima de la cota de inundación. En cualquier caso, se debe evitar su colocación en sótanos",
+          img: ""
+        }
       ]
     };
   },
@@ -286,15 +321,36 @@ li button {
   clear: both;
 }
 
+.fuentes {
+  list-style: disc;
+}
+
+img {
+  max-width: 80%;
+}
+
 @media screen and (max-width: 1024px) {
+  .row {
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  .column-responsive {
+    width: 100%;
+    margin-left: 0;
+  }
   .lista {
     padding-left: 0%;
+    list-style-position: inside;
   }
   .lista h5 {
     max-width: 330px;
   }
   .lista span {
     float: inline-start;
+  }
+  p {
+    overflow-x: unset;
   }
 }
 </style>

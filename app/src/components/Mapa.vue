@@ -3,7 +3,7 @@
     <!-- <router-link class="headers" :to="{ name: 'Recomendaciones', hash: '#ra' }">
       Availability
     </router-link> -->
-    <h1>Hola, aqui podras ver un mapa con la informacion sobre el terreno</h1>
+    <h1>Mapa interactivo con información sobre el terreno</h1>
     <div class="bar-container">
       <div id="barraBusqueda">
         <label for="direccion">Buscar Direccion: </label>
@@ -108,7 +108,10 @@
                 Configurar Colores
               </div>
             </div>
-            <div class="info legend adjust-size" v-show="showColorConfig.altitudes">
+            <div
+              class="info legend adjust-size"
+              v-show="showColorConfig.altitudes"
+            >
               <h5>Configurar Colores:</h5>
               <ul
                 v-for="(color, index) in color_altitudes"
