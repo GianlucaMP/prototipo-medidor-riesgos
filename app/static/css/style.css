@@ -108,6 +108,12 @@ a {
   width: 100%;
 }
 
+.no-border {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
 /* media screen o media queries -> cuando la resolución sea menor a lo puesto, cambia el diseño */
 @media screen and (max-width: 1024px) {
   .section1 .col,
@@ -118,3 +124,4 @@ a {
     border-radius: 0;
   }
 }
+

@@ -57,15 +57,15 @@
               probable <br />
 
               <div class="mt-2">
-                <span
-                  class="material-symbols-outlined"
+                <button
+                  class="material-symbols-outlined no-border"
                   style="font-size: 18px;"
                   @click="
                     showColorConfig.inundaciones = !showColorConfig.inundaciones
                   "
                 >
                   settings
-                </span>
+                </button>
                 Configurar Colores
               </div>
             </div>
@@ -96,15 +96,15 @@
                 </template>
               </template>
               <div class="mt-2">
-                <span
-                  class="material-symbols-outlined"
+                <button
+                  class="material-symbols-outlined no-border"
                   style="font-size: 18px;"
                   @click="
                     showColorConfig.altitudes = !showColorConfig.altitudes
                   "
                 >
                   settings
-                </span>
+                </button>
                 Configurar Colores
               </div>
             </div>

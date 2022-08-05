@@ -97,11 +97,6 @@ export default {
 #lista h5 {
   display: inline-block;
 }
-.no-border {
-  padding: 0;
-  border: none;
-  background: none;
-}
 
 /* Efectos de prueba */
 .fade-enter-active,
