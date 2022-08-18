@@ -1,0 +1,12 @@
+version: "3"
+services:
+  medidor-riesgos:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    container_name: demo-medidor-riesgos
+    volumes:
+      - ./app:/usr/src/prototipo-medidor-riesgos/app
+      - /usr/src/prototipo-medidor-riesgos/app/node_modules
